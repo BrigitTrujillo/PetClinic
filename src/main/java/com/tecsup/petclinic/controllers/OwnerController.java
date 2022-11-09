@@ -10,13 +10,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.tecsup.petclinic.dto.OwnerDTO;
 import com.tecsup.petclinic.entities.Owner;
 import com.tecsup.petclinic.exception.OwnerNotFoundException;
-import com.tecsup.petclinic.exception.PetNotFoundException;
 import com.tecsup.petclinic.services.OwnerService;
 
+/**
+ * 
+ * @author jgomezm
+ *
+ */
+@RestController
 public class OwnerController {
 
 	@Autowired
@@ -29,15 +35,15 @@ public class OwnerController {
 	// @JsonIgnore
 	@GetMapping("/owners")
 	public Iterable<Owner> getOwners() {
-		
+		//
 		return service.findAll();
 	}
 
 	
 	/**
-	 * Create owner
+	 * Create Owner
 	 * 
-	 * @param newOnwer
+	 * @param newOwner
 	 * @return
 	 */
 	/*
@@ -49,18 +55,19 @@ public class OwnerController {
 	
 	/**
 	 *  Create Owner
-	 * @param newPet
+	 * @param newOwner
 	 * @return
 	 */
-	@PostMapping("/owners")
+	@PostMapping("/pets")
 	@ResponseStatus(HttpStatus.CREATED)
 	Owner create(@RequestBody OwnerDTO newOwner) {
 		Owner owner = new Owner();
 		owner.setFirst_name(newOwner.getFirstname());
-		owner.setFirst_name(newOwner.getFirstname());
+		owner.setLast_name(newOwner.getLastname());
 		owner.setAddress(newOwner.getAddress());
 		owner.setCity(newOwner.getCity());
 		owner.setTelephone(newOwner.getTelephone());
+		
 		return service.create(owner);
 	}
 	
@@ -71,13 +78,13 @@ public class OwnerController {
 	 * 
 	 * @param id
 	 * @return
-	 * @throws OwnerNotFoundException
+	 * @throws PetNotFoundException
 	 */
 	@GetMapping("/owners/{id}")
 	ResponseEntity<Owner> findOne(@PathVariable Long id) {
 		try {
 			return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
-		} catch (PetNotFoundException e) {
+		} catch (OwnerNotFoundException e) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
@@ -95,12 +102,12 @@ public class OwnerController {
 		try {
 			owner = service.findById(id);
 			owner.setFirst_name(newOwner.getFirstname());
-			owner.setFirst_name(newOwner.getFirstname());
+			owner.setLast_name(newOwner.getLastname());
 			owner.setAddress(newOwner.getAddress());
 			owner.setCity(newOwner.getCity());
 			owner.setTelephone(newOwner.getTelephone());
 			service.update(owner);
-		} catch (PetNotFoundException e) {
+		} catch (OwnerNotFoundException e) {
 			owner = service.create(owner);
 		}
 		return owner;
@@ -110,18 +117,16 @@ public class OwnerController {
 	 * 
 	 * @param id
 	 */
-	@DeleteMapping("/owner/{id}")
+	@DeleteMapping("/owners/{id}")
 	ResponseEntity<String> delete(@PathVariable Long id) {
 
 		try {
 			service.delete(id);
 			return new ResponseEntity<>("" + id, HttpStatus.OK);
-		} catch (PetNotFoundException e) {
+		} catch (OwnerNotFoundException e) {
 			// TODO Auto-generated catch block
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 		}
 	}
 
-
-	
 }

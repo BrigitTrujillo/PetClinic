@@ -17,7 +17,11 @@ import com.tecsup.petclinic.entities.Pet;
 import com.tecsup.petclinic.exception.PetNotFoundException;
 import com.tecsup.petclinic.services.PetService;
 
-
+/**
+ * 
+ * @author jgomezm
+ *
+ */
 @RestController
 public class PetController {
 
